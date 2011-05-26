@@ -1,0 +1,11 @@
+--- bitcoin-0.3.21/src/makefile.unix.new	2011-05-26 00:00:26.214649194 +0200
++++ bitcoin-0.3.21/src/makefile.unix	2011-05-26 00:00:54.437829629 +0200
+@@ -10,7 +10,7 @@ WXLIBS=$(shell wx-config --libs)
+ 
+ USE_UPNP:=0
+ 
+-DEFS=-DNOPCH -DFOURWAYSSE2 -DUSE_SSL
++DEFS=-DNOPCH -DFOURWAYSSE2 -DUSE_SSL -DBOOST_FILESYSTEM_DEPRECATED
+ 
+ # for boost 1.37, add -mt to the boost libraries
+ LIBS= \
