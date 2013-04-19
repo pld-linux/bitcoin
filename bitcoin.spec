@@ -1,19 +1,21 @@
 Summary:	Bitcoin is a peer-to-peer currency
 Name:		bitcoin
-Version:	0.3.21
-Release:	0.1
+Version:	0.8.1
+Release:	1
 License:	MIT/X11
 Group:		X11/Applications
-Source0:	http://downloads.sourceforge.net/bitcoin/%{name}-%{version}-linux.tar.gz
-# Source0-md5:	19e530a9b60e3a0987998a87b30d8cdc
-Patch0:		%{name}-boost.patch
-Patch1:		%{name}-nostatic.patch
+Source0:	https://github.com/bitcoin/bitcoin/archive/v%{version}.tar.gz
+# Source0-md5:	d767f23fa7a2ce0143f738b30deb32e0
 URL:		http://www.bitcoin.org
+BuildRequires:	QtCore-devel
+BuildRequires:	QtDBus-devel
+BuildRequires:	QtGui-devel
 BuildRequires:	boost-devel
 BuildRequires:	db-cxx-devel
 BuildRequires:	miniupnpc-devel >= 1.5
 BuildRequires:	openssl-devel
-BuildRequires:	wxGTK2-unicode-devel >= 2.9
+BuildRequires:	qrencode-devel
+BuildRequires:	qt4-qmake
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -23,43 +25,32 @@ managed collectively by the network.
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
 
 %build
-%{__make} -C src -f makefile.unix \
-	CXX="%{__cxx}" \
-	WXINCLUDEPATHS="$(wx-gtk2-unicode-2.9-config --cxxflags)" \
-	WXLIBS="$(wx-gtk2-unicode-2.9-config --libs)" \
-	USE_UPNP=1
-
-%{__make} -C src -f makefile.unix \
-	CXX="%{__cxx}" \
-	WXINCLUDEPATHS="$(wx-gtk2-unicode-2.9-config --cxxflags)" \
-	WXLIBS="$(wx-gtk2-unicode-2.9-config --libs)" \
+qmake-qt4 \
 	USE_UPNP=1 \
-	bitcoind
+	USE_DBUS=1 \
+	USE_QRCODE=1
+
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_bindir},%{_localedir}}
 
-install src/{bitcoin,bitcoind} $RPM_BUILD_ROOT%{_bindir}
+install -d $RPM_BUILD_ROOT{%{_bindir},%{_localedir},%{_desktopdir},%{_pixmapsdir},%{_datadir}/kde4/services}
 
-# install locales
-for dir in $(find locale/ -mindepth 1 -maxdepth 1 -type d); do
-	lang=$(basename $dir)
-	
-	install -d $RPM_BUILD_ROOT%{_localedir}/$lang/LC_MESSAGES
-	install $dir/LC_MESSAGES/bitcoin.mo $RPM_BUILD_ROOT%{_localedir}/$lang/LC_MESSAGES
-done
-
-%find_lang %{name}
+install bitcoin-qt $RPM_BUILD_ROOT%{_bindir}
+install contrib/debian/bitcoin-qt.desktop $RPM_BUILD_ROOT%{_desktopdir}
+install contrib/debian/bitcoin-qt.protocol $RPM_BUILD_ROOT%{_datadir}/kde4/services
+install share/pixmaps/bitcoin{32,80}.xpm $RPM_BUILD_ROOT%{_pixmapsdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files -f %{name}.lang
+%files
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/bitcoin
-%attr(755,root,root) %{_bindir}/bitcoind
+%doc doc/*.txt
+%attr(755,root,root) %{_bindir}/bitcoin-qt
+%{_datadir}/kde4/services/bitcoin-qt.protocol
+%{_desktopdir}/bitcoin-qt.desktop
+%{_pixmapsdir}/bitcoin*.xpm
