@@ -1,11 +1,11 @@
 Summary:	Bitcoin is a peer-to-peer currency
 Name:		bitcoin
-Version:	0.8.1
-Release:	2
+Version:	0.8.2
+Release:	1
 License:	MIT/X11
 Group:		X11/Applications
 Source0:	https://github.com/bitcoin/bitcoin/archive/v%{version}.tar.gz
-# Source0-md5:	d767f23fa7a2ce0143f738b30deb32e0
+# Source0-md5:	e7aecd5c22717c2d2aba96838e1491de
 URL:		http://www.bitcoin.org
 BuildRequires:	QtCore-devel
 BuildRequires:	QtDBus-devel
@@ -51,14 +51,11 @@ rm -rf $RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir}/%{name},%{_mandir}/man{1,5},%{_localedir},%{_desktopdir},%{_pixmapsdir},%{_datadir}/kde4/services}
 
-install src/bitcoind $RPM_BUILD_ROOT%{_libdir}/%{name}/bitcoind
-sed -e 's#/usr/lib/bitcoin/#%{_libdir}/%{name}/#g' contrib/debian/bin/bitcoind > $RPM_BUILD_ROOT%{_bindir}/bitcoind
-chmod 755 $RPM_BUILD_ROOT%{_bindir}/bitcoind
-
+install src/bitcoind $RPM_BUILD_ROOT%{_bindir}
 install bitcoin-qt $RPM_BUILD_ROOT%{_bindir}
 install contrib/debian/bitcoin-qt.desktop $RPM_BUILD_ROOT%{_desktopdir}
 install contrib/debian/bitcoin-qt.protocol $RPM_BUILD_ROOT%{_datadir}/kde4/services
-install share/pixmaps/bitcoin{32,80}.xpm $RPM_BUILD_ROOT%{_pixmapsdir}
+install share/pixmaps/bitcoin{32,64,128,256}.png $RPM_BUILD_ROOT%{_pixmapsdir}
 
 install contrib/debian/manpages/bitcoind.1 $RPM_BUILD_ROOT%{_mandir}/man1
 install contrib/debian/manpages/bitcoin.conf.5 $RPM_BUILD_ROOT%{_mandir}/man5
@@ -70,8 +67,6 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc doc/*.txt contrib/debian/examples/bitcoin.conf
 %attr(755,root,root) %{_bindir}/bitcoind
-%dir %{_libdir}/%{name}
-%attr(755,root,root) %{_libdir}/%{name}/bitcoind
 %{_mandir}/man1/bitcoind.1*
 %{_mandir}/man5/bitcoin.conf.5*
 
@@ -80,4 +75,4 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/bitcoin-qt
 %{_datadir}/kde4/services/bitcoin-qt.protocol
 %{_desktopdir}/bitcoin-qt.desktop
-%{_pixmapsdir}/bitcoin*.xpm
+%{_pixmapsdir}/bitcoin*.png
