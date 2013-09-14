@@ -1,11 +1,11 @@
 Summary:	Bitcoin is a peer-to-peer currency
 Name:		bitcoin
-Version:	0.8.3
-Release:	3
+Version:	0.8.5
+Release:	1
 License:	MIT/X11
 Group:		X11/Applications
 Source0:	https://github.com/bitcoin/bitcoin/archive/v%{version}.tar.gz
-# Source0-md5:	18184d3284044a615cb36eb617eebd95
+# Source0-md5:	384696b39f3b48bd322a496e6141279c
 URL:		http://www.bitcoin.org
 BuildRequires:	QtCore-devel
 BuildRequires:	QtDBus-devel
