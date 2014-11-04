@@ -1,11 +1,11 @@
 Summary:	Bitcoin is a peer-to-peer currency
 Name:		bitcoin
-Version:	0.9.1
-Release:	3
+Version:	0.9.3
+Release:	1
 License:	MIT/X11
 Group:		X11/Applications
 Source0:	https://github.com/bitcoin/bitcoin/archive/v%{version}.tar.gz
-# Source0-md5:	7a9c14c09b04e3e37d703fbfe5c3b1e2
+# Source0-md5:	719ac255715deffafc2ae7554c66ba70
 URL:		http://www.bitcoin.org
 BuildRequires:	QtCore-devel
 BuildRequires:	QtDBus-devel
@@ -45,6 +45,7 @@ Qt-based Bitcoin Wallet.
 %{__automake}
 
 %configure \
+	--disable-silent-rules \
 	--with-miniupnpc \
 	--with-qrencode \
 	--with-incompatible-bdb \
