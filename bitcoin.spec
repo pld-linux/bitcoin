@@ -1,7 +1,7 @@
 Summary:	Bitcoin is a peer-to-peer currency
 Name:		bitcoin
 Version:	0.9.3
-Release:	1
+Release:	2
 License:	MIT/X11
 Group:		X11/Applications
 Source0:	https://github.com/bitcoin/bitcoin/archive/v%{version}.tar.gz
