@@ -1,11 +1,11 @@
 Summary:	Bitcoin is a peer-to-peer currency
 Name:		bitcoin
-Version:	0.9.3
-Release:	2
+Version:	0.10.2
+Release:	1
 License:	MIT/X11
 Group:		X11/Applications
 Source0:	https://github.com/bitcoin/bitcoin/archive/v%{version}.tar.gz
-# Source0-md5:	719ac255715deffafc2ae7554c66ba70
+# Source0-md5:	ac03eb641aac6beba5212695668fa989
 URL:		http://www.bitcoin.org
 BuildRequires:	QtCore-devel
 BuildRequires:	QtDBus-devel
@@ -38,11 +38,7 @@ Qt-based Bitcoin Wallet.
 %setup -q
 
 %build
-%{__libtoolize}
-%{__aclocal}
-%{__autoconf}
-%{__autoheader}
-%{__automake}
+./autogen.sh
 
 %configure \
 	--disable-silent-rules \
@@ -74,11 +70,17 @@ install contrib/debian/manpages/bitcoin.conf.5 $RPM_BUILD_ROOT%{_mandir}/man5
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post -p /sbin/ldconfig
+%postun -p /sbin/ldconfig
+
 %files
 %defattr(644,root,root,755)
 %doc doc/*.txt contrib/debian/examples/bitcoin.conf
 %attr(755,root,root) %{_bindir}/bitcoin-cli
+%attr(755,root,root) %{_bindir}/bitcoin-tx
 %attr(755,root,root) %{_bindir}/bitcoind
+%attr(755,root,root) %ghost %{_libdir}/libbitcoinconsensus.so.0
+%attr(755,root,root) %{_libdir}/libbitcoinconsensus.so.*.*
 %{_mandir}/man1/bitcoind.1*
 %{_mandir}/man5/bitcoin.conf.5*
 
