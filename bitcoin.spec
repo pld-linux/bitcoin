@@ -1,11 +1,11 @@
 Summary:	Bitcoin is a peer-to-peer currency
 Name:		bitcoin
-Version:	0.11.0
-Release:	5
+Version:	0.14.0
+Release:	1
 License:	MIT/X11
 Group:		X11/Applications
-Source0:	https://github.com/bitcoin/bitcoin/archive/v%{version}.tar.gz
-# Source0-md5:	7463ff45ad2ece6fad1b673bb2c2afbb
+Source0:	https://github.com/bitcoin/bitcoin/archive/v%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	d2debd041b1f4941fc82079be8f6af13
 URL:		http://www.bitcoin.org
 BuildRequires:	QtCore-devel
 BuildRequires:	QtDBus-devel
@@ -60,12 +60,9 @@ install -d $RPM_BUILD_ROOT{%{_mandir}/man{1,5},%{_localedir},%{_desktopdir},%{_p
 %{__make} install \
 		DESTDIR=$RPM_BUILD_ROOT
 
-install contrib/debian/bitcoin-qt.desktop $RPM_BUILD_ROOT%{_desktopdir}
-install contrib/debian/bitcoin-qt.protocol $RPM_BUILD_ROOT%{_datadir}/kde4/services
-install share/pixmaps/bitcoin{32,64,128,256}.png $RPM_BUILD_ROOT%{_pixmapsdir}
-
-install contrib/debian/manpages/bitcoind.1 $RPM_BUILD_ROOT%{_mandir}/man1
-install contrib/debian/manpages/bitcoin.conf.5 $RPM_BUILD_ROOT%{_mandir}/man5
+cp -p contrib/debian/bitcoin-qt.desktop $RPM_BUILD_ROOT%{_desktopdir}
+cp -p contrib/debian/bitcoin-qt.protocol $RPM_BUILD_ROOT%{_datadir}/kde4/services
+cp -p share/pixmaps/bitcoin{32,64,128,256}.png $RPM_BUILD_ROOT%{_pixmapsdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -81,8 +78,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/bitcoind
 %attr(755,root,root) %ghost %{_libdir}/libbitcoinconsensus.so.0
 %attr(755,root,root) %{_libdir}/libbitcoinconsensus.so.*.*
+%{_mandir}/man1/bitcoin-cli.1*
+%{_mandir}/man1/bitcoin-tx.1*
 %{_mandir}/man1/bitcoind.1*
-%{_mandir}/man5/bitcoin.conf.5*
 
 %files qt
 %defattr(644,root,root,755)
@@ -90,3 +88,4 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/kde4/services/bitcoin-qt.protocol
 %{_desktopdir}/bitcoin-qt.desktop
 %{_pixmapsdir}/bitcoin*.png
+%{_mandir}/man1/bitcoin-qt.1*
