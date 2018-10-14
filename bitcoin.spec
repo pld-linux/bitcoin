@@ -1,28 +1,38 @@
 # TODO: Readd missing icons/*.destktop deleted from contrib/debian during 0.14.0 -> 0.14.2
 # TODO: Consider running as system-wide service (check contrib/init) with own user/group
+# TODO: --with-system-univalue?
 Summary:	Bitcoin is a peer-to-peer currency
+Summary(pl.UTF-8):	Bitcoin - waluta peer-to-peer
 Name:		bitcoin
 Version:	0.14.2
-Release:	4
-License:	MIT/X11
+Release:	5
+License:	MIT
 Group:		X11/Applications
 # Source0:	https://github.com/bitcoin/bitcoin/archive/v%{version}/%{name}-%{version}.tar.gz
 Source0:	https://bitcoin.org/bin/bitcoin-core-%{version}/bitcoin-%{version}.tar.gz
 # Source0-md5:	4324327fbb2d696b98809b3ddbd40b0c
 # https://bitcoin.org/bin/bitcoin-core-0.14.2/bitcoin-0.14.2.tar.gz
-URL:		http://www.bitcoin.org
-BuildRequires:	QtCore-devel
-BuildRequires:	QtDBus-devel
-BuildRequires:	QtGui-devel
-BuildRequires:	autoconf
+URL:		http://www.bitcoin.org/
+BuildRequires:	QtCore-devel >= 4.0
+BuildRequires:	QtDBus-devel >= 4.0
+BuildRequires:	QtGui-devel >= 4.0
+BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake
-BuildRequires:	boost-devel
-BuildRequires:	db-cxx-devel
-BuildRequires:	libtool
+BuildRequires:	boost-devel >= 1.49
+BuildRequires:	db-cxx-devel >= 4.8
+BuildRequires:	gettext-tools
+BuildRequires:	libevent-devel
+# -std=c++11
+BuildRequires:	libstdc++-devel >= 6:4.7
+BuildRequires:	libtool >= 2:2
+#BuildRequires:	libunivalue-devel
 BuildRequires:	miniupnpc-devel >= 1.5
 BuildRequires:	openssl-devel
+BuildRequires:	pkgconfig
 BuildRequires:	protobuf-devel
+BuildRequires:	python >= 1:2.7
 BuildRequires:	qrencode-devel
+BuildRequires:	zeromq-devel >= 4
 Requires:	perl-base
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -31,26 +41,64 @@ Bitcoin is a peer-to-peer currency. Peer-to-peer means that no central
 authority issues new money or tracks transactions. These tasks are
 managed collectively by the network.
 
+%description -l pl.UTF-8
+Bitcoin to waluta peer-to-peer. Oznacza to, że nie ma centralnej
+instytucji emitującej nowe pieniądze czy śledzącej transakcje. Zadania
+te są zarządzane kolektywnie przez sieć.
+
+%package devel
+Summary:	Header file for bitcoinconsensus library
+Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki bitcoinconsensus
+Group:		Development/Libraries
+Requires:	%{name} = %{version}-%{release}
+Requires:	openssl-devel
+
+%description devel
+Header file for bitcoinconsensus library.
+
+%description devel -l pl.UTF-8
+Pliki nagłówkowe biblioteki bitcoinconsensus.
+
+%package static
+Summary:	Static bitcoinconsensus library
+Summary(pl.UTF-8):	Statyczna biblioteka bitcoinconsensus
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}-%{release}
+
+%description static
+Static bitcoinconsensus library.
+
+%description static -l pl.UTF-8
+Statyczna biblioteka bitcoinconsensus.
+
 %package qt
 Summary:	Qt-based Bitcoin Wallet
+Summary(pl.UTF-8):	Portfel na bitcoiny oparty na Qt
 Group:		X11/Applications
+Requires:	%{name} = %{version}-%{release}
 
 %description qt
 Qt-based Bitcoin Wallet.
+
+%description qt -l pl.UTF-8
+Portfel na bitcoiny oparty na Qt.
 
 %prep
 %setup -q
 
 %build
-./autogen.sh
-
+%{__libtoolize}
+%{__aclocal} -I build-aux/m4
+%{__autoconf}
+%{__autoheader}
+%{__automake}
 %configure \
 	--disable-silent-rules \
-	--with-miniupnpc \
-	--with-qrencode \
-	--with-incompatible-bdb \
 	--with-boost \
 	--with-gui=qt4 \
+	--with-incompatible-bdb \
+	--with-miniupnpc \
+	--with-qrencode \
 	--with-qtdbus
 
 %{__make}
@@ -58,8 +106,7 @@ Qt-based Bitcoin Wallet.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
-install -d $RPM_BUILD_ROOT{%{_mandir}/man{1,5},%{_localedir},%{_desktopdir},%{_pixmapsdir},%{_datadir}/kde4/services}
+#install -d $RPM_BUILD_ROOT{%{_mandir}/man{1,5},%{_localedir},%{_desktopdir},%{_pixmapsdir},%{_datadir}/kde4/services}
 
 %{__make} install \
 		DESTDIR=$RPM_BUILD_ROOT
@@ -72,20 +119,30 @@ install -d $RPM_BUILD_ROOT{%{_mandir}/man{1,5},%{_localedir},%{_desktopdir},%{_p
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
+%post	-p /sbin/ldconfig
+%postun	-p /sbin/ldconfig
 
 %files
 %defattr(644,root,root,755)
-%doc doc/*.txt 
+%doc COPYING doc/*.txt 
 %attr(755,root,root) %{_bindir}/bitcoin-cli
 %attr(755,root,root) %{_bindir}/bitcoin-tx
 %attr(755,root,root) %{_bindir}/bitcoind
+%attr(755,root,root) %{_libdir}/libbitcoinconsensus.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libbitcoinconsensus.so.0
-%attr(755,root,root) %{_libdir}/libbitcoinconsensus.so.*.*
 %{_mandir}/man1/bitcoin-cli.1*
 %{_mandir}/man1/bitcoin-tx.1*
 %{_mandir}/man1/bitcoind.1*
+
+%files devel
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libbitcoinconsensus.so
+%{_includedir}/bitcoinconsensus.h
+%{_pkgconfigdir}/libbitcoinconsensus.pc
+
+%files static
+%defattr(644,root,root,755)
+%{_libdir}/libbitcoinconsensus.a
 
 %files qt
 %defattr(644,root,root,755)
