@@ -106,10 +106,13 @@ Portfel na bitcoiny oparty na Qt.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-#install -d $RPM_BUILD_ROOT{%{_mandir}/man{1,5},%{_localedir},%{_desktopdir},%{_pixmapsdir},%{_datadir}/kde4/services}
+#install -d $RPM_BUILD_ROOT{%{_desktopdir},%{_pixmapsdir},%{_datadir}/kde4/services}
 
 %{__make} install \
 		DESTDIR=$RPM_BUILD_ROOT
+
+# obsoleted by pkg-config
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/libbitcoinconsensus.la
 
 # TODO: gone during 0.14.0 -> 0.14.2
 # cp -p contrib/debian/bitcoin-qt.desktop $RPM_BUILD_ROOT%{_desktopdir}
