@@ -1,6 +1,5 @@
 # TODO: Readd missing icons/*.destktop deleted from contrib/debian during 0.14.0 -> 0.14.2
 # TODO: Consider running as system-wide service (check contrib/init) with own user/group
-# TODO: --with-system-univalue?
 Summary:	Bitcoin is a peer-to-peer currency
 Summary(pl.UTF-8):	Bitcoin - waluta peer-to-peer
 Name:		bitcoin
@@ -25,7 +24,7 @@ BuildRequires:	libevent-devel
 # -std=c++11
 BuildRequires:	libstdc++-devel >= 6:4.7
 BuildRequires:	libtool >= 2:2
-#BuildRequires:	libunivalue-devel
+BuildRequires:	libunivalue-devel
 BuildRequires:	miniupnpc-devel >= 1.5
 BuildRequires:	openssl-devel
 BuildRequires:	pkgconfig
@@ -99,7 +98,8 @@ Portfel na bitcoiny oparty na Qt.
 	--with-incompatible-bdb \
 	--with-miniupnpc \
 	--with-qrencode \
-	--with-qtdbus
+	--with-qtdbus \
+	--with-system-univalue
 
 %{__make}
 
