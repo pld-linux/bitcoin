@@ -3,13 +3,13 @@
 Summary:	Bitcoin is a peer-to-peer currency
 Summary(pl.UTF-8):	Bitcoin - waluta peer-to-peer
 Name:		bitcoin
-Version:	0.17.1
-Release:	2
+Version:	0.18.0
+Release:	1
 License:	MIT
 Group:		X11/Applications
 # Source0:	https://github.com/bitcoin/bitcoin/archive/v%{version}/%{name}-%{version}.tar.gz
 Source0:	https://bitcoin.org/bin/bitcoin-core-%{version}/bitcoin-%{version}.tar.gz
-# Source0-md5:	54baebae19a4b3a60c7faa8ba051f1d5
+# Source0-md5:	916c8fb6e7e83f60207113273c39507c
 URL:		http://www.bitcoin.org/
 BuildRequires:	QtCore-devel >= 4.0
 BuildRequires:	QtDBus-devel >= 4.0
@@ -19,11 +19,11 @@ BuildRequires:	automake
 BuildRequires:	boost-devel >= 1.49
 BuildRequires:	db-cxx-devel >= 4.8
 BuildRequires:	gettext-tools
-BuildRequires:	libevent-devel
+BuildRequires:	libevent-devel >= 2
 # -std=c++11
 BuildRequires:	libstdc++-devel >= 6:4.7
 BuildRequires:	libtool >= 2:2
-BuildRequires:	libunivalue-devel
+BuildRequires:	libunivalue-devel >= 1.0.4
 BuildRequires:	miniupnpc-devel >= 1.5
 BuildRequires:	openssl-devel
 BuildRequires:	pkgconfig
@@ -31,6 +31,7 @@ BuildRequires:	protobuf-devel
 BuildRequires:	python >= 1:2.7
 BuildRequires:	qrencode-devel
 BuildRequires:	zeromq-devel >= 4
+Requires:	libunivalue >= 1.0.4
 Requires:	perl-base
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -129,6 +130,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc COPYING doc/*.txt 
 %attr(755,root,root) %{_bindir}/bitcoin-cli
 %attr(755,root,root) %{_bindir}/bitcoin-tx
+%attr(755,root,root) %{_bindir}/bitcoin-wallet
 %attr(755,root,root) %{_bindir}/bitcoind
 %attr(755,root,root) %{_libdir}/libbitcoinconsensus.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libbitcoinconsensus.so.0
