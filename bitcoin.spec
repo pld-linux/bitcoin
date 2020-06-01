@@ -3,13 +3,14 @@
 Summary:	Bitcoin is a peer-to-peer currency
 Summary(pl.UTF-8):	Bitcoin - waluta peer-to-peer
 Name:		bitcoin
-Version:	0.18.0
-Release:	4
+Version:	0.19.1
+Release:	1
 License:	MIT
 Group:		X11/Applications
 # Source0:	https://github.com/bitcoin/bitcoin/archive/v%{version}/%{name}-%{version}.tar.gz
 Source0:	https://bitcoin.org/bin/bitcoin-core-%{version}/bitcoin-%{version}.tar.gz
-# Source0-md5:	916c8fb6e7e83f60207113273c39507c
+# Source0-md5:	6066d7247a5a8c61392fb79ae882bd30
+Patch0:		qt-5.15.patch
 URL:		http://www.bitcoin.org/
 BuildRequires:	QtCore-devel >= 4.0
 BuildRequires:	QtDBus-devel >= 4.0
@@ -84,6 +85,7 @@ Portfel na bitcoiny oparty na Qt.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 %{__libtoolize}
@@ -136,6 +138,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %ghost %{_libdir}/libbitcoinconsensus.so.0
 %{_mandir}/man1/bitcoin-cli.1*
 %{_mandir}/man1/bitcoin-tx.1*
+%{_mandir}/man1/bitcoin-wallet.1*
 %{_mandir}/man1/bitcoind.1*
 
 %files devel
