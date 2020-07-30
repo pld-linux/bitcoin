@@ -3,20 +3,22 @@
 Summary:	Bitcoin is a peer-to-peer currency
 Summary(pl.UTF-8):	Bitcoin - waluta peer-to-peer
 Name:		bitcoin
-Version:	0.19.1
+Version:	0.20.0
 Release:	1
 License:	MIT
 Group:		X11/Applications
 # Source0:	https://github.com/bitcoin/bitcoin/archive/v%{version}/%{name}-%{version}.tar.gz
 Source0:	https://bitcoin.org/bin/bitcoin-core-%{version}/bitcoin-%{version}.tar.gz
-# Source0-md5:	6066d7247a5a8c61392fb79ae882bd30
+# Source0-md5:	46e632b4f42a5162e6f100a01cf4ee00
 Patch0:		qt-5.15.patch
 URL:		http://www.bitcoin.org/
-BuildRequires:	QtCore-devel >= 4.0
-BuildRequires:	QtDBus-devel >= 4.0
-BuildRequires:	QtGui-devel >= 4.0
-BuildRequires:	autoconf >= 2.60
-BuildRequires:	automake
+BuildRequires:	Qt5Core-devel >= 5.0
+BuildRequires:	Qt5DBus-devel >= 5.0
+BuildRequires:	Qt5Gui-devel >= 5.0
+BuildRequires:	Qt5Network-devel >= 5.0
+BuildRequires:	Qt5Widgets-devel >= 5.0
+BuildRequires:	autoconf >= 2.69
+BuildRequires:	automake >= 1:1.13
 BuildRequires:	boost-devel >= 1.49
 BuildRequires:	db-cxx-devel >= 4.8
 BuildRequires:	gettext-tools
@@ -29,7 +31,7 @@ BuildRequires:	miniupnpc-devel >= 1.5
 BuildRequires:	openssl-devel
 BuildRequires:	pkgconfig
 BuildRequires:	protobuf-devel
-BuildRequires:	python >= 1:2.7
+BuildRequires:	python3 >= 1:3.5
 BuildRequires:	qrencode-devel
 BuildRequires:	zeromq-devel >= 4
 Requires:	libunivalue >= 1.0.4
@@ -93,6 +95,13 @@ Portfel na bitcoiny oparty na Qt.
 %{__autoconf}
 %{__autoheader}
 %{__automake}
+cd src/secp256k1
+%{__libtoolize}
+%{__aclocal} -I build-aux/m4
+%{__autoconf}
+%{__autoheader}
+%{__automake}
+cd ../..
 %configure \
 	--disable-silent-rules \
 	--with-boost \
