@@ -11,6 +11,7 @@ Group:		X11/Applications
 Source0:	https://bitcoin.org/bin/bitcoin-core-%{version}/bitcoin-%{version}.tar.gz
 # Source0-md5:	46e632b4f42a5162e6f100a01cf4ee00
 Patch0:		qt-5.15.patch
+Patch1:		univalue.patch
 URL:		http://www.bitcoin.org/
 BuildRequires:	Qt5Core-devel >= 5.0
 BuildRequires:	Qt5DBus-devel >= 5.0
@@ -88,6 +89,7 @@ Portfel na bitcoiny oparty na Qt.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 %{__libtoolize}
