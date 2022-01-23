@@ -3,14 +3,13 @@
 Summary:	Bitcoin is a peer-to-peer currency
 Summary(pl.UTF-8):	Bitcoin - waluta peer-to-peer
 Name:		bitcoin
-Version:	0.20.0
-Release:	2
+Version:	22.0
+Release:	1
 License:	MIT
 Group:		X11/Applications
 # Source0:	https://github.com/bitcoin/bitcoin/archive/v%{version}/%{name}-%{version}.tar.gz
 Source0:	https://bitcoin.org/bin/bitcoin-core-%{version}/bitcoin-%{version}.tar.gz
-# Source0-md5:	46e632b4f42a5162e6f100a01cf4ee00
-Patch0:		qt-5.15.patch
+# Source0-md5:	f822f7e798fbdc36e8fc18b355ab446d
 Patch1:		univalue.patch
 URL:		http://www.bitcoin.org/
 BuildRequires:	Qt5Core-devel >= 5.0
@@ -88,7 +87,6 @@ Portfel na bitcoiny oparty na Qt.
 
 %prep
 %setup -q
-%patch0 -p1
 %patch1 -p1
 
 %build
@@ -143,12 +141,14 @@ rm -rf $RPM_BUILD_ROOT
 %doc COPYING doc/*.txt 
 %attr(755,root,root) %{_bindir}/bitcoin-cli
 %attr(755,root,root) %{_bindir}/bitcoin-tx
+%attr(755,root,root) %{_bindir}/bitcoin-util
 %attr(755,root,root) %{_bindir}/bitcoin-wallet
 %attr(755,root,root) %{_bindir}/bitcoind
 %attr(755,root,root) %{_libdir}/libbitcoinconsensus.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libbitcoinconsensus.so.0
 %{_mandir}/man1/bitcoin-cli.1*
 %{_mandir}/man1/bitcoin-tx.1*
+%{_mandir}/man1/bitcoin-util.1*
 %{_mandir}/man1/bitcoin-wallet.1*
 %{_mandir}/man1/bitcoind.1*
 
