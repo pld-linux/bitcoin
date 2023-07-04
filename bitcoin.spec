@@ -4,7 +4,7 @@ Summary:	Bitcoin is a peer-to-peer currency
 Summary(pl.UTF-8):	Bitcoin - waluta peer-to-peer
 Name:		bitcoin
 Version:	22.0
-Release:	3
+Release:	4
 License:	MIT
 Group:		X11/Applications
 # Source0:	https://github.com/bitcoin/bitcoin/archive/v%{version}/%{name}-%{version}.tar.gz
