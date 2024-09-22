@@ -30,8 +30,8 @@ BuildRequires:	gettext-tools
 BuildRequires:	libevent-devel >= 2.1.8
 BuildRequires:	libmultiprocess-devel
 BuildRequires:	libnatpmp-devel
-# -std=c++11
-BuildRequires:	libstdc++-devel >= 6:4.7
+# -std=c++20
+BuildRequires:	libstdc++-devel >= 6:8
 BuildRequires:	libtool >= 2:2
 # bundled library is used as of 27.x
 #BuildRequires:	libunivalue-devel >= 1.0.4
