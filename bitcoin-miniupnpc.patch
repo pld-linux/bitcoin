@@ -1,0 +1,14 @@
+--- bitcoin-27.0/src/mapport.cpp.orig	2024-09-22 19:47:34.086129582 +0200
++++ bitcoin-27.0/src/mapport.cpp	2024-09-22 19:47:36.999480228 +0200
+@@ -164,7 +164,11 @@ static bool ProcessUpnp()
+     struct IGDdatas data;
+     int r;
+ 
++#if MINIUPNPC_API_VERSION < 18
+     r = UPNP_GetValidIGD(devlist, &urls, &data, lanaddr, sizeof(lanaddr));
++#else
++    r = UPNP_GetValidIGD(devlist, &urls, &data, lanaddr, sizeof(lanaddr), NULL, 0);
++#endif
+     if (r == 1)
+     {
+         if (fDiscover) {

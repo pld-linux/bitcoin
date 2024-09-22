@@ -1,18 +1,21 @@
 # TODO: Readd missing icons/*.destktop deleted from contrib/debian during 0.14.0 -> 0.14.2
 # TODO: Consider running as system-wide service (check contrib/init) with own user/group
+#
+# Conditional build:
+%bcond_with	ccache	# ccache for build speedup
+
 Summary:	Bitcoin is a peer-to-peer currency
 Summary(pl.UTF-8):	Bitcoin - waluta peer-to-peer
 Name:		bitcoin
-Version:	22.0
-Release:	4
+Version:	27.0
+Release:	1
 License:	MIT
 Group:		X11/Applications
 # Source0:	https://github.com/bitcoin/bitcoin/archive/v%{version}/%{name}-%{version}.tar.gz
 Source0:	https://bitcoin.org/bin/bitcoin-core-%{version}/bitcoin-%{version}.tar.gz
-# Source0-md5:	f822f7e798fbdc36e8fc18b355ab446d
-Patch0:		includes.patch
-Patch1:		univalue.patch
-URL:		http://www.bitcoin.org/
+# Source0-md5:	0850dc36e811ad780123f12083974a5f
+Patch0:		%{name}-miniupnpc.patch
+URL:		https://bitcoin.org/
 BuildRequires:	Qt5Core-devel >= 5.0
 BuildRequires:	Qt5DBus-devel >= 5.0
 BuildRequires:	Qt5Gui-devel >= 5.0
@@ -21,21 +24,28 @@ BuildRequires:	Qt5Widgets-devel >= 5.0
 BuildRequires:	autoconf >= 2.69
 BuildRequires:	automake >= 1:1.13
 BuildRequires:	boost-devel >= 1.49
+%{?with_ccache:BuildRequires:	ccache}
 BuildRequires:	db-cxx-devel >= 4.8
 BuildRequires:	gettext-tools
-BuildRequires:	libevent-devel >= 2
+BuildRequires:	libevent-devel >= 2.1.8
+BuildRequires:	libmultiprocess-devel
+BuildRequires:	libnatpmp-devel
 # -std=c++11
 BuildRequires:	libstdc++-devel >= 6:4.7
 BuildRequires:	libtool >= 2:2
-BuildRequires:	libunivalue-devel >= 1.0.4
-BuildRequires:	miniupnpc-devel >= 1.5
+# bundled library is used as of 27.x
+#BuildRequires:	libunivalue-devel >= 1.0.4
+# API >= 17
+BuildRequires:	miniupnpc-devel >= 2.1
 BuildRequires:	openssl-devel
 BuildRequires:	pkgconfig
 BuildRequires:	protobuf-devel
 BuildRequires:	python3 >= 1:3.5
 BuildRequires:	qrencode-devel
+BuildRequires:	sqlite3-devel >= 3.7.17
 BuildRequires:	zeromq-devel >= 4
-Requires:	libunivalue >= 1.0.4
+Requires:	libevent >= 2.1.8
+#Requires:	libunivalue >= 1.0.4
 Requires:	perl-base
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -89,7 +99,6 @@ Portfel na bitcoiny oparty na Qt.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
 
 %build
 %{__libtoolize}
@@ -101,18 +110,17 @@ cd src/secp256k1
 %{__libtoolize}
 %{__aclocal} -I build-aux/m4
 %{__autoconf}
-%{__autoheader}
 %{__automake}
 cd ../..
 %configure \
+	%{!?with_ccache:--disable-ccache} \
 	--disable-silent-rules \
 	--with-boost \
-	--with-gui=qt4 \
+	--with-gui=qt5 \
 	--with-incompatible-bdb \
 	--with-miniupnpc \
 	--with-qrencode \
-	--with-qtdbus \
-	--with-system-univalue
+	--with-qtdbus
 
 %{__make}
 
